@@ -326,32 +326,21 @@ section[id] {
   background: var(--line);
 }
 
-/* "TITLE ————" (hairline fills the rest of the row) */
+/* "TITLE ————": the hairline fills the rest of the row. The title text sits in
+   its own <span>; when fewer than 64px are left beside it, the hairline wraps
+   onto its own row under the title instead of leaving a detached stub. */
 .section-title--line {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
-  gap: 16px;
+  gap: 20px 16px;
 }
 
 .section-title--line::after {
   content: "";
-  flex: 1;
-  min-width: 32px;
+  flex: 1 0 64px;
   height: 1px;
   background: var(--line);
-}
-
-/* Phones: the title wraps, so the hairline sits under it instead */
-@media (max-width: 639.98px) {
-  .section-title--line {
-    display: block;
-  }
-
-  .section-title--line::after {
-    display: block;
-    width: 64px;
-    margin-top: 24px;
-  }
 }
 
 /* Small text link with an icon (Instagram) */
