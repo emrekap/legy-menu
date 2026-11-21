@@ -11,6 +11,19 @@
     en: "Hi, I'd like to reserve a table.",
   };
 
+  // Open nights: 0 = Sunday, 1 = Monday ... 6 = Saturday (placeholder: Wed–Sat).
+  // Keep in step with the opening hours text in index.html.
+  const OPEN_DAYS = [3, 4, 5, 6];
+  // Door time on the first screen. Keep in step with the opening hours text in index.html.
+  const DOORS = "21:00";
+
+  // Words for the first-screen line: "Tonight · Doors 21:00" on open nights,
+  // otherwise the next open night, e.g. "Wednesday · Doors 21:00".
+  const NIGHT_TEXT = {
+    tr: { tonight: "Bu gece", doors: "Kapılar", days: ["Pazar", "Pazartesi", "Salı", "Çarşamba", "Perşembe", "Cuma", "Cumartesi"] },
+    en: { tonight: "Tonight", doors: "Doors", days: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"] },
+  };
+
   // Shared with app.js, so the menu opens in the language chosen here.
   const STORAGE_KEY = "menu-language";
   const DEFAULT_LANGUAGE = "tr";
@@ -26,7 +39,7 @@
     "nav.visit": "Visit",
     "nav.reserve": "Reserve",
     "hero.title": "Live DJs.<br>Signature cocktails.<br><em>Late nights.</em>",
-    "hero.tonight": "Tonight · Doors 21:00",
+    "hero.tonight": "Wednesday – Saturday · Doors 21:00",
     "cta.whatsapp": "Reserve on WhatsApp",
     "cta.menu": "See the menu",
     "marquee.djs": "Live DJs",
@@ -148,6 +161,43 @@
       }
     }
 
+    // Which night it is in Istanbul (0 = Sunday ... 6 = Saturday), whatever the
+    // visitor's own clock says. Until 04:00 the night before is still going.
+    function istanbulNight() {
+      const parts = new Intl.DateTimeFormat("en-US", {
+        timeZone: "Europe/Istanbul",
+        weekday: "short",
+        hour: "numeric",
+        hourCycle: "h23",
+      }).formatToParts(new Date());
+      const part = (type) => parts.find((p) => p.type === type).value;
+      const day = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].indexOf(part("weekday"));
+      return Number(part("hour")) % 24 < 4 ? (day + 6) % 7 : day;
+    }
+
+    // Open tonight: "Tonight · Doors 21:00" with the live dot. Closed: the next
+    // open night, no dot. If this fails, the always-true line from the HTML stays.
+    const tonight = document.querySelector(".tonight");
+    const tonightText = tonight && tonight.querySelector("[data-i18n]");
+
+    function showTonight(lang) {
+      if (!tonightText) return;
+      tonight.classList.remove("is-live");
+      try {
+        const words = NIGHT_TEXT[lang];
+        const night = istanbulNight();
+        if (night < 0) return;
+        let wait = 0; // nights until the next open one
+        while (wait < 7 && !OPEN_DAYS.includes((night + wait) % 7)) wait += 1;
+        if (wait === 7) return; // OPEN_DAYS is empty
+        const when = wait === 0 ? words.tonight : words.days[(night + wait) % 7];
+        tonightText.textContent = `${when} · ${words.doors} ${DOORS}`;
+        tonight.classList.toggle("is-live", wait === 0);
+      } catch (error) {
+        console.error("site.js: tonight line failed", error);
+      }
+    }
+
     function applyLanguage(lang) {
       html.lang = lang;
       textItems.forEach(({ el, key, tr }) => {
@@ -156,6 +206,7 @@
       attrItems.forEach(({ el, attr, key, tr }) => {
         el.setAttribute(attr, translate(key, lang, tr));
       });
+      showTonight(lang);
       document.querySelectorAll(".lang-switch button").forEach((button) => {
         button.setAttribute("aria-pressed", String(button.dataset.lang === lang));
       });

@@ -1,7 +1,7 @@
 /* Légy İstanbul: landing page styles (index.html).
    Plain CSS, no build step. Breakpoints: 640px, 768px, 1024px.
    Spec: .superdesign/design-system.md. JS hooks (.js, .is-scrolled, .is-open,
-   .is-visible, aria-pressed) are set by site.js. */
+   .is-visible, .is-live, aria-pressed) are set by site.js. */
 
 /* ---------- Tokens ---------- */
 :root {
@@ -684,13 +684,19 @@ section[id] {
   color: var(--cream);
 }
 
+/* Shown only when site.js finds the venue open tonight (.tonight.is-live) */
 .live-dot {
+  display: none;
   flex-shrink: 0;
   width: 8px;
   height: 8px;
   border-radius: 50%;
   background: var(--neon);
   box-shadow: 0 0 8px var(--neon);
+}
+
+.tonight.is-live .live-dot {
+  display: block;
 }
 
 .hero-ctas {
