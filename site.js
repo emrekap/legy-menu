@@ -4,7 +4,8 @@
   // ---- Config -------------------------------------------------------------
 
   // PLACEHOLDER: replace with the real number before launch.
-  // International format, digits only (no +, spaces or dashes).
+  // Write it with the country code, for example "+90 555 123 45 67".
+  // Spaces, +, brackets and dashes are fine; only the digits are used.
   const WHATSAPP_NUMBER = "905550000000";
   const WHATSAPP_MESSAGE = {
     tr: "Merhaba, masa rezervasyonu yapmak istiyorum.",
@@ -211,7 +212,7 @@
       document.querySelectorAll(".lang-switch button").forEach((button) => {
         button.setAttribute("aria-pressed", String(button.dataset.lang === lang));
       });
-      const href = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(WHATSAPP_MESSAGE[lang])}`;
+      const href = `https://wa.me/${WHATSAPP_NUMBER.replace(/\D/g, "")}?text=${encodeURIComponent(WHATSAPP_MESSAGE[lang])}`;
       document.querySelectorAll("[data-whatsapp]").forEach((a) => {
         a.href = href;
         a.target = "_blank";
