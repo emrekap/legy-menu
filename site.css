@@ -521,6 +521,37 @@ section[id] {
   }
 }
 
+/* "Menü" pill in the bar below 768px, so guests who scan a table QR code see
+   the way to the menu on the first screen. From 768px it is in the nav links. */
+@media (min-width: 768px) {
+  .nav-menu-pill {
+    display: none;
+  }
+}
+
+/* Narrow phones: Reserve shows only the WhatsApp glyph (the label stays for
+   screen readers), so the Menü pill fits beside it. */
+@media (max-width: 439.98px) {
+  .nav-actions {
+    gap: 12px;
+  }
+
+  .nav-reserve {
+    width: 44px;
+    padding: 0;
+  }
+
+  .nav-reserve-label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
+}
+
 /* Mobile panel (below 768px): opens under the bar when the header has .is-open */
 @media (max-width: 767.98px) {
   .nav-menu {
@@ -583,6 +614,17 @@ section[id] {
   .nav-toggle,
   .lang-switch--panel {
     display: none;
+  }
+}
+
+/* Tablets: five links, the switch and Reserve share the bar, so tighter tracking */
+@media (min-width: 768px) and (max-width: 1023.98px) {
+  .nav-links {
+    gap: 12px;
+  }
+
+  .nav-links a {
+    letter-spacing: 0.12em;
   }
 }
 

@@ -37,6 +37,7 @@
     "nav.cocktails": "Cocktails",
     "nav.gallery": "Gallery",
     "nav.visit": "Visit",
+    "nav.menu": "Menu",
     "nav.reserve": "Reserve",
     "hero.title": "Live DJs.<br>Signature cocktails.<br><em>Late nights.</em>",
     "hero.tonight": "Wednesday – Saturday · Doors 21:00",
