@@ -297,10 +297,13 @@ section[id] {
   text-align: center;
 }
 
+/* Display headings use text-wrap: balance so no word is left alone on a line
+   (browsers without it simply wrap as usual). */
 .section-title {
   font: 500 36px/1.1 var(--font-display);
   letter-spacing: 0.06em;
   text-transform: uppercase;
+  text-wrap: balance;
 }
 
 @media (min-width: 1024px) {
@@ -710,6 +713,7 @@ section[id] {
   font: 500 44px/1 var(--font-display);
   letter-spacing: 0.04em;
   text-transform: uppercase;
+  text-wrap: balance;
 }
 
 .hero-title em {
@@ -921,10 +925,21 @@ section[id] {
   gap: 48px;
 }
 
+/* The title's size follows its column (9% of the width), so its lines break
+   into pairs of words in both languages instead of leaving one word alone
+   ("MEETS REFINEMENT." must fit, "WHERE RHYTHM MEETS" must not). Balance can't
+   do this by itself because of the <br>. */
+.intro-copy {
+  container-type: inline-size;
+  max-width: 448px; /* same measure as the body; keeps the title at about 40px */
+}
+
 .intro-title {
   font: 500 30px/1.375 var(--font-display);
+  font-size: clamp(28px, 9cqi, 48px);
   letter-spacing: 0.04em;
   text-transform: uppercase;
+  text-wrap: balance;
 }
 
 .intro-body {
@@ -948,8 +963,13 @@ section[id] {
     grid-template-columns: 1fr 1fr;
   }
 
+  .intro-copy {
+    max-width: none;
+  }
+
   .intro-title {
     font-size: 48px;
+    font-size: clamp(28px, 9cqi, 48px);
     line-height: 1.15;
   }
 }
@@ -1206,6 +1226,15 @@ section[id] {
   font: 500 36px/1.25 var(--font-display);
   letter-spacing: 0.04em;
   text-transform: uppercase;
+  text-wrap: balance;
+}
+
+/* Phones: small enough that "MASANIZ BİR MESAJ" / "YOUR TABLE IS ONE" fits on
+   its line, so no word is left alone (the <br> keeps balance from helping). */
+@media (max-width: 639.98px) {
+  .reserve-title {
+    font-size: clamp(28px, 8.4vw, 36px);
+  }
 }
 
 .reserve-body {
