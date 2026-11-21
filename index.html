@@ -3,6 +3,15 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script>
+      // Legacy QR codes point at /?lang=xx; the PDF menu lives at /menu now.
+      // Otherwise mark the page as scripted so reveal styles can apply.
+      if (location.search.indexOf("lang") !== -1 && new URLSearchParams(location.search).has("lang")) {
+        location.replace("/menu" + location.search + location.hash);
+      } else {
+        document.documentElement.className = document.documentElement.className.replace("no-js", "js");
+      }
+    </script>
     <title>Légy İstanbul — The art of a good night.</title>
     <meta name="description" content="Canlı DJ'ler, imza kokteyller ve sabaha kadar süren geceler. Rezervasyon WhatsApp'tan." data-i18n-attr="content:meta.description" />
     <meta property="og:title" content="Légy İstanbul — The art of a good night." />
