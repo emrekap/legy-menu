@@ -4,7 +4,7 @@ A small static site for Légy İstanbul with two pages:
 
 - **`/`** is the landing page: the nights, the signature cocktails, a photo
   gallery, table reservations on WhatsApp, and the address and opening hours.
-  It has a "See the menu" button.
+  It has a "Menü" link at the top and a "See the menu" button.
 - **`/menu`** shows the menu PDF as a normal web page, with no PDF toolbar and
   no page numbers. A **TR / EN** switch at the top right changes between the
   Turkish and the English menu. It has one addition for phones (see below).
@@ -27,39 +27,79 @@ The parts are found automatically from the PDF each time it is opened
 (`layout.js`), so there is nothing to set up when the menu changes. The PDF
 itself is not changed.
 
-## Before launch: fill in the placeholders
+## Before launch
+
+### Fill in the placeholders
 
 The landing page has made-up details that must be replaced with the real ones.
 Search for the old text to find each one.
 
 In `site.js` (at the top):
 
-- **WhatsApp number**: `WHATSAPP_NUMBER`. Digits only, with the country code and
-  no `+` or spaces, for example `905321234567`. Every "Reserve on WhatsApp"
-  button uses it. Right now it is a fake number.
+- **WhatsApp number**: `WHATSAPP_NUMBER`. Write it with the country code, for
+  example `+90 532 123 45 67` (spaces, `+`, brackets and dashes are fine). Every
+  "Reserve on WhatsApp" button uses it. Right now it is a fake number.
+- **Open nights**: `OPEN_DAYS`, the nights the venue is open, as numbers:
+  0 = Sunday, 1 = Monday, 2 = Tuesday, 3 = Wednesday, 4 = Thursday, 5 = Friday,
+  6 = Saturday. Right now it is `[3, 4, 5, 6]`, Wednesday to Saturday.
+- **Door time**: `DOORS`, right now `"21:00"`.
+
+`OPEN_DAYS` and `DOORS` make the line under the big headline on the first
+screen. On an open night it says "Bu gece · Kapılar 21:00" (English: "Tonight ·
+Doors 21:00") with a small yellow light. On a closed night it names the next
+open night instead, for example "Çarşamba · Kapılar 21:00". It goes by Istanbul
+time, and a night lasts until 04:00, so at 01:30 on Sunday it is still Saturday
+night. Keep both in step with the opening hours below.
 
 In `index.html`:
 
-- **Tonight line** in the first screen: "Bu gece · Kapılar 21:00" (English:
-  "Tonight · Doors 21:00").
-- **DJ lineup**: the Nights section, three cards (Resident DJ, Guest DJ,
-  Special guest) with their music styles and times.
-- **Address**: "Placeholder Sokak No: 12, Beyoğlu, İstanbul" in the Visit
+- **DJ lineup**: the Nights section, three cards: "Perşembe" with
+  "Resident DJ", "Cuma" with "Konuk DJ", "Cumartesi" with "Sürpriz konuk". Each
+  card has its music styles (for example "House", "Elektronik") and times
+  ("23:00 – 04:00").
+- **Address**: "Placeholder Sokak No: 12" and "Beyoğlu, İstanbul" in the Visit
   section.
 - **Phone**: "+90 5XX XXX XX XX" in the Visit section.
 - **Opening hours**: "Çarşamba – Cumartesi" and "21:00 – 04:00" in the Visit
-  section.
+  section. Also "Çarşamba – Cumartesi · Kapılar 21:00" near the top of
+  `index.html`: it shows instead of the open-night line on the rare phones
+  where the page's script doesn't run.
 - **Map box**: the box labelled "Harita" in the Visit section is only a
   placeholder. Replace it with a real map or a link to one.
 
-Many texts on the landing page exist in both Turkish and English. The Turkish
-text is in `index.html`; the English text is in the `EN` list near the top of
-`site.js`. If you change a text in `index.html` (the tonight line, the days of
-the opening hours, "Guest DJ" or "Special guest"), change the matching English text
-in `site.js` too, or English guests will still see the old one. The address,
-the phone, the DJ names that are already in English ("Resident DJ"), the music
-styles and the times are written once, in `index.html`, and shown in both
-languages.
+### Turkish and English texts
+
+The Turkish texts are in `index.html`. Their English versions are in the `EN`
+list near the top of `site.js`. One rule tells you which texts have one:
+
+- If the tag around the text has `data-i18n="some.name"`, the English version
+  is the line `"some.name": …` in the `EN` list in `site.js`. Change both, or
+  English guests keep seeing the old text.
+- Text without `data-i18n` shows the same in both languages. Change it once.
+
+For example, the first DJ card's day is
+`<p class="micro-label" data-i18n="day.thu">Perşembe</p>`, and its English is
+the line `"day.thu": "Thursday",` in `site.js`. If that night moves to
+Wednesday, change "Perşembe" to "Çarşamba" and "Thursday" to "Wednesday".
+"Cuma", "Cumartesi", "Konuk DJ", "Sürpriz konuk", "Elektronik", "Harita" and
+"Çarşamba – Cumartesi" work the same way. The address, the phone, the times and
+the music styles already in English ("House", "Disco", "Afro House",
+"Indie Dance") have no `data-i18n`.
+
+**Real DJ names** are the same in both languages. Replace the text (for example
+"Konuk DJ") with the name, then remove the `data-i18n="…"` part from the tag
+and delete its line from `site.js`. If the name is not Turkish, put it inside
+`<span lang="en">…</span>`, as the first card does with "Resident DJ", so that
+an "i" in it doesn't turn into "İ" in capitals.
+
+### Replace the table QR codes
+
+QR codes printed before the landing page open `legyistanbul.com`, which now
+shows the landing page, not the menu. Guests reach the menu with one tap on
+"Menü" at the top, but please replace those codes with the new ones in `qr/`
+(`menu-qr` opens the menu), ideally before the first deploy or right after it.
+The old English code (`?lang=en`) still opens the English menu directly; the
+new `menu-qr-en` does the same.
 
 ## Add the menus
 
@@ -139,7 +179,8 @@ allow access.
 
 ### Deploy a new version to production
 
-From this folder, run:
+First read [What gets uploaded](#what-gets-uploaded). Then, from this folder,
+run:
 
 ```bash
 npx wrangler pages deploy . --project-name=legy-menu --branch=main
@@ -173,12 +214,27 @@ older production deployment and choose **Rollback to this deployment**.
 Everything in this folder is uploaded, and anyone can open it by its address,
 this README included. Don't keep drafts or private files here.
 
+**Before you deploy, move the `.superdesign/` folder out of this folder (or
+delete it).** It holds the design drafts and notes, including an early draft
+with a Kitchen section and example names, and it would be published on
+legyistanbul.com too. Do the same with a `.superpowers/` folder if there is
+one. Folders whose names start with a dot are hidden in Finder: press
+**Cmd + Shift + .** to show them.
+
 ## Update the menu
 
 Replace `menu-tr.pdf` and/or `menu-en.pdf` (keep the exact names), then
 [deploy to production](#deploy-a-new-version-to-production). Guests get the new
 version right away. Each PDF must be smaller than 25 MB, Cloudflare's limit for
 one file.
+
+The landing page also shows the five signature cocktails (VERDE, RITMO, MORA,
+FAKE PALOMA, BITE) with their ingredients and prices. They are typed into the
+page, not taken from the PDF, so when one of them changes on the PDF, change it
+there too: the names, Turkish ingredients and prices are in `index.html` (the
+Cocktails section), and the English ingredients are the `ing.` lines in
+`site.js` (for example `"ing.verde": …`). Otherwise guests see two prices for
+the same drink.
 
 If the new PDF only changes names or prices, the phone column looks the same as
 before. If the designer changed the layout, open the menu on a phone (or the
@@ -214,9 +270,11 @@ need to change them.
 
 ## Files
 
-- `index.html`: the landing page (shown at `/`)
+- `index.html`: the landing page (shown at `/`), including the five signature
+  cocktails with their prices
 - `site.css`: the look of the landing page
-- `site.js`: the landing page's behavior, its English texts, and the WhatsApp number
+- `site.js`: the landing page's behavior, its English texts, the WhatsApp number,
+  and the open nights and door time
 - `menu.html`: the menu viewer page (shown at `/menu`)
 - `app.js`: draws the PDF and switches language on the menu
 - `layout.js`: finds the parts of each page for the phone column
@@ -225,9 +283,7 @@ need to change them.
 - `vendor/fonts/`: the fonts (Cormorant Garamond and Lato), stored locally, with their licences
 - `qr/`: print-ready QR codes (SVG for print shops, 2000 px PNG). `menu-qr` opens
   the menu (<https://legyistanbul.com/menu>), `menu-qr-en` opens the English menu
-  directly (<https://legyistanbul.com/menu?lang=en>). QR codes printed before this
-  change point to `legyistanbul.com`, which now shows the landing page. It has a
-  "See the menu" button, so those codes still work (the English one still
-  forwards straight to the menu).
+  directly (<https://legyistanbul.com/menu?lang=en>). Older printed codes open the
+  landing page instead: see [Replace the table QR codes](#replace-the-table-qr-codes).
 - `vendor/pdfjs/`: [PDF.js](https://mozilla.github.io/pdf.js/) 6.5.438 (Mozilla's PDF renderer), stored locally so the site doesn't depend on any other server
 - `.wrangler/`: created by the deploy command to remember the Cloudflare project. It is not uploaded and is safe to delete.
