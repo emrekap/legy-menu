@@ -10,6 +10,10 @@
         location.replace("/menu" + location.search + location.hash);
       } else {
         document.documentElement.className = document.documentElement.className.replace("no-js", "js");
+        // If site.js did not load or stopped early, fall back to the no-JS look.
+        document.addEventListener("DOMContentLoaded", function () {
+          if (!document.documentElement.classList.contains("js-ready")) document.documentElement.classList.replace("js", "no-js");
+        });
       }
     </script>
     <title>Légy İstanbul — The art of a good night.</title>

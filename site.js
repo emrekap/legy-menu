@@ -75,125 +75,6 @@
     "footer.rights": "© 2026 Légy İstanbul. All rights reserved.",
   };
 
-  // ---- Language -----------------------------------------------------------
-
-  const html = document.documentElement;
-  const warned = new Set();
-
-  // Turkish text as authored in the HTML, captured before anything changes.
-  const textItems = [...document.querySelectorAll("[data-i18n]")].map((el) => ({
-    el,
-    key: el.dataset.i18n,
-    tr: el.innerHTML,
-  }));
-  const attrItems = [];
-  document.querySelectorAll("[data-i18n-attr]").forEach((el) => {
-    el.dataset.i18nAttr.split(";").forEach((pair) => {
-      const cut = pair.indexOf(":");
-      if (cut < 1) return;
-      const attr = pair.slice(0, cut).trim();
-      attrItems.push({ el, attr, key: pair.slice(cut + 1).trim(), tr: el.getAttribute(attr) });
-    });
-  });
-
-  function translate(key, lang, turkish) {
-    if (lang === "tr") return turkish;
-    if (Object.hasOwn(EN, key)) return EN[key];
-    if (!warned.has(key)) {
-      warned.add(key);
-      console.warn(`site.js: no English text for "${key}", keeping Turkish.`);
-    }
-    return turkish;
-  }
-
-  function readSaved() {
-    try {
-      const saved = localStorage.getItem(STORAGE_KEY);
-      if (saved === "tr" || saved === "en") return saved;
-    } catch {
-      // Storage can be blocked (private mode); the default still works.
-    }
-    return DEFAULT_LANGUAGE;
-  }
-
-  function save(lang) {
-    try {
-      localStorage.setItem(STORAGE_KEY, lang);
-    } catch {
-      // See readSaved.
-    }
-  }
-
-  function applyLanguage(lang) {
-    html.lang = lang;
-    textItems.forEach(({ el, key, tr }) => {
-      el.innerHTML = translate(key, lang, tr);
-    });
-    attrItems.forEach(({ el, attr, key, tr }) => {
-      el.setAttribute(attr, translate(key, lang, tr));
-    });
-    document.querySelectorAll(".lang-switch button").forEach((button) => {
-      button.setAttribute("aria-pressed", String(button.dataset.lang === lang));
-    });
-    const href = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(WHATSAPP_MESSAGE[lang])}`;
-    document.querySelectorAll("[data-whatsapp]").forEach((a) => {
-      a.href = href;
-      a.target = "_blank";
-      a.rel = "noopener";
-    });
-  }
-
-  document.querySelectorAll(".lang-switch button").forEach((button) => {
-    button.addEventListener("click", () => {
-      const lang = button.dataset.lang === "en" ? "en" : "tr";
-      applyLanguage(lang);
-      save(lang);
-    });
-  });
-
-  applyLanguage(readSaved());
-
-  // ---- Nav ----------------------------------------------------------------
-
-  const nav = document.querySelector(".site-nav");
-  const toggle = document.querySelector(".nav-toggle");
-  const wide = window.matchMedia("(min-width: 768px)");
-  let ticking = false;
-
-  function updateNav() {
-    ticking = false;
-    const open = nav.classList.contains("is-open");
-    nav.classList.toggle("is-scrolled", open || window.scrollY > 40);
-  }
-
-  function requestNavUpdate() {
-    if (ticking) return;
-    ticking = true;
-    requestAnimationFrame(updateNav);
-  }
-
-  function setOpen(open) {
-    nav.classList.toggle("is-open", open);
-    toggle.setAttribute("aria-expanded", String(open));
-    updateNav();
-  }
-
-  window.addEventListener("scroll", requestNavUpdate, { passive: true });
-  toggle.addEventListener("click", () => setOpen(!nav.classList.contains("is-open")));
-  document.querySelectorAll("#nav-links a").forEach((a) => {
-    a.addEventListener("click", () => setOpen(false));
-  });
-  document.addEventListener("keydown", (event) => {
-    if (event.key === "Escape" && nav.classList.contains("is-open")) {
-      setOpen(false);
-      toggle.focus();
-    }
-  });
-  wide.addEventListener("change", () => {
-    if (wide.matches) setOpen(false);
-  });
-  updateNav();
-
   // ---- Reveal on scroll ---------------------------------------------------
 
   const reveals = document.querySelectorAll(".reveal");
@@ -213,5 +94,140 @@
       { threshold: 0.1 },
     );
     reveals.forEach((el) => observer.observe(el));
+  }
+
+  // Reveal is set up; tells the head script that the page does not need its no-JS fallback.
+  document.documentElement.classList.add("js-ready");
+
+  // ---- Language -----------------------------------------------------------
+  try {
+    const html = document.documentElement;
+    const warned = new Set();
+
+    // Turkish text as authored in the HTML, captured before anything changes.
+    const textItems = [...document.querySelectorAll("[data-i18n]")].map((el) => ({
+      el,
+      key: el.dataset.i18n,
+      tr: el.innerHTML,
+    }));
+    const attrItems = [];
+    document.querySelectorAll("[data-i18n-attr]").forEach((el) => {
+      el.dataset.i18nAttr.split(";").forEach((pair) => {
+        const cut = pair.indexOf(":");
+        if (cut < 1) return;
+        const attr = pair.slice(0, cut).trim();
+        attrItems.push({ el, attr, key: pair.slice(cut + 1).trim(), tr: el.getAttribute(attr) });
+      });
+    });
+
+    function translate(key, lang, turkish) {
+      if (lang === "tr") return turkish;
+      if (Object.prototype.hasOwnProperty.call(EN, key)) return EN[key];
+      if (!warned.has(key)) {
+        warned.add(key);
+        console.warn(`site.js: no English text for "${key}", keeping Turkish.`);
+      }
+      return turkish;
+    }
+
+    function readSaved() {
+      try {
+        const saved = localStorage.getItem(STORAGE_KEY);
+        if (saved === "tr" || saved === "en") return saved;
+      } catch {
+        // Storage can be blocked (private mode); the default still works.
+      }
+      return DEFAULT_LANGUAGE;
+    }
+
+    function save(lang) {
+      try {
+        localStorage.setItem(STORAGE_KEY, lang);
+      } catch {
+        // See readSaved.
+      }
+    }
+
+    function applyLanguage(lang) {
+      html.lang = lang;
+      textItems.forEach(({ el, key, tr }) => {
+        el.innerHTML = translate(key, lang, tr);
+      });
+      attrItems.forEach(({ el, attr, key, tr }) => {
+        el.setAttribute(attr, translate(key, lang, tr));
+      });
+      document.querySelectorAll(".lang-switch button").forEach((button) => {
+        button.setAttribute("aria-pressed", String(button.dataset.lang === lang));
+      });
+      const href = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(WHATSAPP_MESSAGE[lang])}`;
+      document.querySelectorAll("[data-whatsapp]").forEach((a) => {
+        a.href = href;
+        a.target = "_blank";
+        a.rel = "noopener";
+      });
+    }
+
+    document.querySelectorAll(".lang-switch button").forEach((button) => {
+      button.addEventListener("click", () => {
+        const lang = button.dataset.lang === "en" ? "en" : "tr";
+        applyLanguage(lang);
+        save(lang);
+      });
+    });
+
+    applyLanguage(readSaved());
+
+    // Coming back from /menu can restore this page from the back/forward cache
+    // without running the script again; pick up the language chosen meanwhile.
+    window.addEventListener("pageshow", (event) => {
+      if (event.persisted) applyLanguage(readSaved());
+    });
+  } catch (error) {
+    console.error("site.js: language failed", error);
+  }
+
+  // ---- Nav ----------------------------------------------------------------
+  try {
+    const nav = document.querySelector(".site-nav");
+    const toggle = document.querySelector(".nav-toggle");
+    if (!nav) throw new Error("no .site-nav");
+    const wide = window.matchMedia("(min-width: 768px)");
+    let ticking = false;
+
+    function updateNav() {
+      ticking = false;
+      const open = nav.classList.contains("is-open");
+      nav.classList.toggle("is-scrolled", open || window.scrollY > 40);
+    }
+
+    function requestNavUpdate() {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(updateNav);
+    }
+
+    function setOpen(open) {
+      nav.classList.toggle("is-open", open);
+      if (toggle) toggle.setAttribute("aria-expanded", String(open));
+      updateNav();
+    }
+
+    window.addEventListener("scroll", requestNavUpdate, { passive: true });
+    if (toggle) toggle.addEventListener("click", () => setOpen(!nav.classList.contains("is-open")));
+    document.querySelectorAll("#nav-links a").forEach((a) => {
+      a.addEventListener("click", () => setOpen(false));
+    });
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape" && nav.classList.contains("is-open")) {
+        setOpen(false);
+        if (toggle) toggle.focus();
+      }
+    });
+    wide.addEventListener("change", () => {
+      if (wide.matches) setOpen(false);
+    });
+    updateNav();
+  } catch (error) {
+    console.error("site.js: nav failed", error);
   }
 })();
