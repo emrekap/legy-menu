@@ -1,10 +1,14 @@
 # Legy — menu
 
-A tiny static site that shows the menu PDF as a normal web page, with no PDF
-toolbar and no page numbers. A **TR / EN** switch at the top right changes
-between the Turkish and the English menu. It is the same site as the With menu,
-with one addition for phones (see below). When a guest zooms in, the part on
-screen is redrawn so the text stays sharp.
+A small static site for Légy İstanbul with two pages:
+
+- **`/`** is the landing page: the nights, the signature cocktails, a photo
+  gallery, table reservations on WhatsApp, and the address and opening hours.
+  It has a "See the menu" button.
+- **`/menu`** shows the menu PDF as a normal web page, with no PDF toolbar and
+  no page numbers. A **TR / EN** switch at the top right changes between the
+  Turkish and the English menu. It has one addition for phones (see below).
+  When a guest zooms in, the part on screen is redrawn so the text stays sharp.
 
 ## On phones and on bigger screens
 
@@ -23,6 +27,40 @@ The parts are found automatically from the PDF each time it is opened
 (`layout.js`), so there is nothing to set up when the menu changes. The PDF
 itself is not changed.
 
+## Before launch: fill in the placeholders
+
+The landing page has made-up details that must be replaced with the real ones.
+Search for the old text to find each one.
+
+In `site.js` (at the top):
+
+- **WhatsApp number**: `WHATSAPP_NUMBER`. Digits only, with the country code and
+  no `+` or spaces, for example `905321234567`. Every "Reserve on WhatsApp"
+  button uses it. Right now it is a fake number.
+
+In `index.html`:
+
+- **Tonight line** in the first screen: "Bu gece · Kapılar 21:00" (English:
+  "Tonight · Doors 21:00").
+- **DJ lineup**: the Nights section, three cards (Resident DJ, Guest DJ,
+  Special guest) with their music styles and times.
+- **Address**: "Placeholder Sokak No: 12, Beyoğlu, İstanbul" in the Visit
+  section.
+- **Phone**: "+90 5XX XXX XX XX" in the Visit section.
+- **Opening hours**: "Çarşamba – Cumartesi" and "21:00 – 04:00" in the Visit
+  section.
+- **Map box**: the box labelled "Harita" in the Visit section is only a
+  placeholder. Replace it with a real map or a link to one.
+
+Many texts on the landing page exist in both Turkish and English. The Turkish
+text is in `index.html`; the English text is in the `EN` list near the top of
+`site.js`. If you change a text in `index.html` (the tonight line, the days of
+the opening hours, "Guest DJ" or "Special guest"), change the matching English text
+in `site.js` too, or English guests will still see the old one. The address,
+the phone, the DJ names that are already in English ("Resident DJ"), the music
+styles and the times are written once, in `index.html`, and shown in both
+languages.
+
 ## Add the menus
 
 Put the two PDFs in this folder and name them exactly:
@@ -38,12 +76,19 @@ is small.
 
 ## Languages
 
-- Guests see the Turkish menu first.
-- If a guest switches language, their phone remembers it for the next visit.
-- A link can open a language directly: add `?lang=en` (or `?lang=tr`) to the
-  address, for example for a separate English QR code.
-- To change the default or add a language, edit `MENUS` and `DEFAULT_LANGUAGE`
-  at the top of `app.js`, and add a button with the same `data-lang` in `index.html`.
+- Guests see Turkish first, on the landing page and on the menu.
+- The landing page and the menu share the guest's choice. If a guest switches
+  language on one, the other follows, and their phone remembers it for the next
+  visit.
+- A link to the menu can open a language directly: add `?lang=en` (or
+  `?lang=tr`) to `/menu`, for example `https://legyistanbul.com/menu?lang=en`
+  for a separate English QR code. Old links like `legyistanbul.com/?lang=en`
+  still work: they forward to the menu in that language.
+- To change the default language, edit `DEFAULT_LANGUAGE` at the top of both
+  `app.js` and `site.js`. Keep the two the same.
+- To add a language to the menu, edit `MENUS` at the top of `app.js` and add a
+  button with the same `data-lang` in `menu.html`. (The landing page only has
+  Turkish and English.)
 
 ## Preview locally
 
@@ -52,8 +97,10 @@ npx serve .
 # or: python3 -m http.server 8000
 ```
 
-Then open the address it prints. (Opening `index.html` by double-clicking won't
-work, because browsers block PDF loading from `file://`.) To see the phone
+Then open the address it prints. With `npx serve .` the menu is at `/menu`.
+With `python3 -m http.server` the menu is at `/menu.html` instead, because that
+server doesn't know the short address. (Opening `menu.html` by double-clicking
+won't work, because browsers block PDF loading from `file://`.) To see the phone
 column on a computer, make the browser window narrow (under about 700 px), or
 use the phone view of the browser's developer tools.
 
@@ -140,7 +187,7 @@ own price under it and that no list is cut in half.
 
 ## Optional tweaks
 
-At the top of `index.html`:
+At the top of `menu.html`:
 
 - `--bg`: the background color. It is picked automatically from the edge of
   your PDF, so you usually don't need to change it.
@@ -167,11 +214,20 @@ need to change them.
 
 ## Files
 
-- `index.html`: the page
-- `app.js`: draws the PDF and switches language
+- `index.html`: the landing page (shown at `/`)
+- `site.css`: the look of the landing page
+- `site.js`: the landing page's behavior, its English texts, and the WhatsApp number
+- `menu.html`: the menu viewer page (shown at `/menu`)
+- `app.js`: draws the PDF and switches language on the menu
 - `layout.js`: finds the parts of each page for the phone column
 - `menu-tr.pdf`, `menu-en.pdf`: the menus
+- `public/images/`: the photos and logo used on the landing page
+- `vendor/fonts/`: the fonts (Cormorant Garamond and Lato), stored locally, with their licences
 - `qr/`: print-ready QR codes (SVG for print shops, 2000 px PNG). `menu-qr` opens
-  <https://legyistanbul.com>, `menu-qr-en` opens the English menu directly.
+  the menu (<https://legyistanbul.com/menu>), `menu-qr-en` opens the English menu
+  directly (<https://legyistanbul.com/menu?lang=en>). QR codes printed before this
+  change point to `legyistanbul.com`, which now shows the landing page. It has a
+  "See the menu" button, so those codes still work (the English one still
+  forwards straight to the menu).
 - `vendor/pdfjs/`: [PDF.js](https://mozilla.github.io/pdf.js/) 6.5.438 (Mozilla's PDF renderer), stored locally so the site doesn't depend on any other server
 - `.wrangler/`: created by the deploy command to remember the Cloudflare project. It is not uploaded and is safe to delete.
