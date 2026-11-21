@@ -59,15 +59,20 @@ use the phone view of the browser's developer tools.
 
 ## Deploy to Cloudflare Pages
 
-The site is meant to be hosted on [Cloudflare Pages](https://pages.cloudflare.com/)
-as the project **`legy-menu`**, the same way as the With menu.
+The site is hosted on [Cloudflare Pages](https://pages.cloudflare.com/) as the
+project **`legy-menu`**, the same way as the With menu. The live address is
+<https://legyistanbul.com> (`www.legyistanbul.com` works too).
 
-**Use your own domain in QR codes and links, never `legy-menu.pages.dev`.**
-Türkiye blocks the whole `pages.dev` domain (since November 2025), so guests on
-Turkish networks can't open a `pages.dev` address. The domain's DNS must be on
-Cloudflare, with its records **proxied** (orange cloud). A DNS-only record, or
-DNS at another provider, would show `legy-menu.pages.dev` to the guest's
-internet provider and the block would hit again.
+**Always use `legyistanbul.com` in QR codes and links, never
+`legy-menu.pages.dev`.** Türkiye blocks the whole `pages.dev` domain (since
+November 2025), so guests on Turkish networks can't open a `pages.dev` address.
+The site still answers at <https://legy-menu.pages.dev>, but only outside
+Türkiye.
+
+The domain's DNS must stay on Cloudflare, with both records **proxied** (orange
+cloud). A DNS-only record, or DNS at another provider, would show
+`legy-menu.pages.dev` to the guest's internet provider and the block would hit
+again.
 
 There is no build step and no GitHub connection: a deploy uploads this folder
 as it is, from your computer.
@@ -82,13 +87,8 @@ npx wrangler login
 ```
 
 The first time, it asks to install `wrangler`: answer `y`. A browser window then
-opens. Log in with the Cloudflare account that should own the `legy-menu`
-project and allow access.
-
-The first deploy (below) asks whether to create the `legy-menu` project: answer
-yes, and use `main` as the production branch. Then, in the
-[Cloudflare dashboard](https://dash.cloudflare.com/), go to **Workers & Pages →
-legy-menu → Custom domains** and add the domain.
+opens. Log in with the Cloudflare account that owns the `legy-menu` project and
+allow access.
 
 ### Deploy a new version to production
 
@@ -99,7 +99,12 @@ npx wrangler pages deploy . --project-name=legy-menu --branch=main
 ```
 
 `--branch=main` is what makes it the live version. When the command finishes,
-the new version is live. Open it on a phone and check both languages.
+the new version is live at <https://legyistanbul.com>. Open it on a phone and
+check both languages.
+
+Use exactly this command (`wrangler pages deploy`). Newer versions of wrangler
+suggest moving the site to Cloudflare Workers with `wrangler deploy`; that would
+make a separate site that the domain doesn't point to.
 
 ### Try a version before it goes live
 
@@ -166,5 +171,7 @@ need to change them.
 - `app.js`: draws the PDF and switches language
 - `layout.js`: finds the parts of each page for the phone column
 - `menu-tr.pdf`, `menu-en.pdf`: the menus
+- `qr/`: print-ready QR codes (SVG for print shops, 2000 px PNG). `menu-qr` opens
+  <https://legyistanbul.com>, `menu-qr-en` opens the English menu directly.
 - `vendor/pdfjs/`: [PDF.js](https://mozilla.github.io/pdf.js/) 6.5.438 (Mozilla's PDF renderer), stored locally so the site doesn't depend on any other server
 - `.wrangler/`: created by the deploy command to remember the Cloudflare project. It is not uploaded and is safe to delete.
