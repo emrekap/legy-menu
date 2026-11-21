@@ -267,7 +267,8 @@
 
     window.addEventListener("scroll", requestNavUpdate, { passive: true });
     if (toggle) toggle.addEventListener("click", () => setOpen(!nav.classList.contains("is-open")));
-    document.querySelectorAll("#nav-links a").forEach((a) => {
+    // Any link in the header (the logo too) closes the mobile panel.
+    nav.querySelectorAll("a").forEach((a) => {
       a.addEventListener("click", () => setOpen(false));
     });
     document.addEventListener("keydown", (event) => {
