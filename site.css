@@ -795,22 +795,42 @@ section[id] {
 }
 
 /* From 1024px: two columns, three-photo collage on the right.
-   The copy column is wider than half so the longest title word
-   ("KOKTEYLLER.", 6.76em) never runs under the photos. */
+   The copy column is a size container and the title is sized from its width,
+   so each authored line stays on one line and never runs under the photos:
+   the longest lines are "İMZA KOKTEYLLER." (9.7em) and "SIGNATURE COCKTAILS."
+   (12.1em). The vh terms keep the CTAs on the first screen of short laptops. */
 @media (min-width: 1024px) {
+  .hero {
+    padding-top: 112px;
+  }
+
   .hero-grid {
-    grid-template-columns: minmax(0, 8fr) minmax(0, 5fr);
+    grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+  }
+
+  .hero-copy {
+    container-type: inline-size;
+  }
+
+  .hero-logo {
+    width: clamp(160px, 24vh, 320px);
   }
 
   .hero-title {
-    font-size: clamp(72px, calc(9vw - 16px), 96px);
+    font-size: 56px; /* browsers without container units */
+    font-size: min(10.1cqi, 10vh, 96px);
+  }
+
+  .hero-title:lang(en) {
+    font-size: 46px;
+    font-size: min(8.1cqi, 10vh, 96px);
   }
 
   .hero-photos {
     display: block;
     position: relative;
-    height: 600px;
     max-width: none;
+    aspect-ratio: 7 / 10;
   }
 
   .hero-photo {
