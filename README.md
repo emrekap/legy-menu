@@ -162,7 +162,8 @@ cloud). A DNS-only record, or DNS at another provider, would show
 again.
 
 There is no build step and no GitHub connection: a deploy uploads this folder
-as it is, from your computer.
+as it is, from your computer, minus its hidden files (see
+[What gets uploaded](#what-gets-uploaded)).
 
 ### One-time setup
 
@@ -183,7 +184,8 @@ First read [What gets uploaded](#what-gets-uploaded). Then, from this folder,
 run:
 
 ```bash
-npx wrangler pages deploy . --project-name=legy-menu --branch=main
+rm -rf /tmp/legy-site && rsync -a --exclude='.*' ./ /tmp/legy-site/ &&
+  npx wrangler pages deploy /tmp/legy-site --project-name=legy-menu --branch=main
 ```
 
 `--branch=main` is what makes it the live version. When the command finishes,
@@ -197,11 +199,19 @@ make a separate site that the domain doesn't point to.
 ### Try a version before it goes live
 
 ```bash
-npx wrangler pages deploy . --project-name=legy-menu --branch=preview
+rm -rf /tmp/legy-site && rsync -a --exclude='.*' ./ /tmp/legy-site/ &&
+  npx wrangler pages deploy /tmp/legy-site --project-name=legy-menu --branch=preview
 ```
 
-This uploads to <https://preview.legy-menu.pages.dev> and leaves the live site
-alone. When it looks right, run the production command above.
+This uploads to <https://preview.legyistanbul.com> and leaves the live site
+alone. The preview address works in Türkiye, and anyone with the address can
+open it. Search engines are told not to list it (the `_headers` file does that).
+When it looks right, run the production command above.
+
+The preview address is set up in Cloudflare in two places: the custom domain
+`preview.legyistanbul.com` on the `legy-menu` project, and a DNS record named
+`preview` (CNAME to `preview.legy-menu.pages.dev`). Keep that record **proxied**
+(orange cloud): otherwise it shows the live site instead of the preview.
 
 ### Go back to an older version
 
@@ -211,14 +221,17 @@ older production deployment and choose **Rollback to this deployment**.
 
 ### What gets uploaded
 
-Everything in this folder is uploaded, and anyone can open it by its address,
-this README included. Don't keep drafts or private files here.
+The deploy commands above first copy this folder to `/tmp/legy-site`, leaving
+out hidden files and folders (names that start with a dot, such as `.git`,
+`.superdesign` and `.superpowers`), and then upload that copy. Everything else
+in this folder is uploaded, and anyone can open it by its address, this README
+included. So don't leave drafts, old menus or private files here, unless they
+are inside a hidden folder.
 
-**Before you deploy, move the `.superdesign/` folder out of this folder (or
-delete it).** It holds the design drafts and notes, including an early draft
-with a Kitchen section and example names, and it would be published on
-legyistanbul.com too. Do the same with a `.superpowers/` folder if there is
-one. Folders whose names start with a dot are hidden in Finder: press
+**Don't deploy with `npx wrangler pages deploy .`** (with a dot, the older
+command). It uploads the hidden folders too, including the design drafts and
+notes in `.superdesign/`: an early draft with a Kitchen section and the names of
+real DJs. Folders whose names start with a dot are hidden in Finder: press
 **Cmd + Shift + .** to show them.
 
 ## Update the menu
@@ -285,5 +298,7 @@ need to change them.
   the menu (<https://legyistanbul.com/menu>), `menu-qr-en` opens the English menu
   directly (<https://legyistanbul.com/menu?lang=en>). Older printed codes open the
   landing page instead: see [Replace the table QR codes](#replace-the-table-qr-codes).
+- `_headers`: tells search engines not to list the preview address
+  (<https://preview.legyistanbul.com>). It doesn't change the live site.
 - `vendor/pdfjs/`: [PDF.js](https://mozilla.github.io/pdf.js/) 6.5.438 (Mozilla's PDF renderer), stored locally so the site doesn't depend on any other server
 - `.wrangler/`: created by the deploy command to remember the Cloudflare project. It is not uploaded and is safe to delete.

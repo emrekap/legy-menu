@@ -1,0 +1,4 @@
+# Cloudflare Pages reads this file; it isn't served as a page.
+# Keep the preview address out of search results. The live site is unaffected.
+https://preview.legyistanbul.com/*
+  X-Robots-Tag: noindex
