@@ -3,34 +3,62 @@
 
   // ---- Config -------------------------------------------------------------
 
-  // PLACEHOLDER: replace with the real number before launch.
-  // Write it with the country code, for example "+90 555 123 45 67".
-  // Spaces, +, brackets and dashes are fine; only the digits are used.
-  const WHATSAPP_NUMBER = "905550000000";
+  // What the venue manager saved at /admin: the WhatsApp number, the open
+  // nights, the door time and the English texts of the venue details and
+  // cocktails. functions/index.js puts it in the page as <script id="site-data">.
+  // The values below it are used only if the page comes without it.
+  const SITE = (() => {
+    try {
+      const data = JSON.parse(document.getElementById("site-data").textContent);
+      return data && typeof data === "object" ? data : {};
+    } catch {
+      return {};
+    }
+  })();
+
+  // Only the digits are used.
+  const WHATSAPP_NUMBER = SITE.whatsapp || "905550000000";
   const WHATSAPP_MESSAGE = {
     tr: "Merhaba, masa rezervasyonu yapmak istiyorum.",
     en: "Hi, I'd like to reserve a table.",
   };
 
-  // Open nights: 0 = Sunday, 1 = Monday ... 6 = Saturday (placeholder: Wed–Sat).
-  // Keep in step with the opening hours text in index.html.
-  const OPEN_DAYS = [3, 4, 5, 6];
-  // Door time on the first screen. Keep in step with the opening hours text in index.html.
-  const DOORS = "21:00";
+  // Open nights: 0 = Sunday, 1 = Monday ... 6 = Saturday.
+  const OPEN_DAYS = Array.isArray(SITE.openDays) ? SITE.openDays : [3, 4, 5, 6];
+  // Door time on the first screen.
+  const DOORS = typeof SITE.doors === "string" ? SITE.doors : "21:00";
 
-  // Words for the first-screen line: "Tonight · Doors 21:00" on open nights,
-  // otherwise the next open night, e.g. "Wednesday · Doors 21:00".
+  // Words for the first-screen line ("Tonight · Doors 21:00" on open nights,
+  // otherwise the next open night, e.g. "Wednesday · Doors 21:00") and for the
+  // dates on the lineup cards ("Friday · 28 Nov").
   const NIGHT_TEXT = {
-    tr: { tonight: "Bu gece", doors: "Kapılar", days: ["Pazar", "Pazartesi", "Salı", "Çarşamba", "Perşembe", "Cuma", "Cumartesi"] },
-    en: { tonight: "Tonight", doors: "Doors", days: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"] },
+    tr: {
+      tonight: "Bu gece",
+      doors: "Kapılar",
+      days: ["Pazar", "Pazartesi", "Salı", "Çarşamba", "Perşembe", "Cuma", "Cumartesi"],
+      months: ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"],
+    },
+    en: {
+      tonight: "Tonight",
+      doors: "Doors",
+      days: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+      months: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+    },
   };
+
+  // The DJ lineup comes from here. The venue manager edits it at /admin;
+  // see functions/api/lineup.js. Cards show the nights of the next LINEUP_DAYS days.
+  const LINEUP_URL = "/api/lineup";
+  const LINEUP_DAYS = 7;
 
   // Shared with app.js, so the menu opens in the language chosen here.
   const STORAGE_KEY = "menu-language";
   const DEFAULT_LANGUAGE = "tr";
 
   // English strings, keyed by the data-i18n keys in index.html. The Turkish
-  // text is read from the page itself at start-up.
+  // text is read from the page itself at start-up. The venue details and the
+  // cocktails come from SITE (see the end of this list); the ones typed here
+  // are used only if the page comes without it.
   const EN = {
     "meta.description": "Live DJs, signature cocktails and late nights in Istanbul. Reserve on WhatsApp.",
     "nav.label": "Sections",
@@ -52,12 +80,7 @@
     "alt.martinis": "A guest holding two martinis",
     "nights.label": "Weekly lineup",
     "nights.title": "Nights",
-    "day.thu": "Thursday",
-    "day.fri": "Friday",
-    "day.sat": "Saturday",
-    "dj.guest": "Guest DJ",
-    "dj.special": "Special guest",
-    "genre.electronic": "Electronic",
+    "nights.empty": "The lineup is coming soon.",
     "cocktails.label": "From the bar",
     "cocktails.title": "Signature cocktails",
     "ing.verde": "Beefeater · homemade elderflower liqueur · sorrel · green apple · citrus",
@@ -85,31 +108,65 @@
     "visit.doorText": "21+ · Smart casual dress.",
     "visit.phone": "Phone",
     "visit.map": "Map",
+    "visit.directions": "Get directions",
+    "visit.mapTitle": "Map of Légy İstanbul",
     "footer.instagram": "Légy on Instagram",
     "footer.menu": "Menu",
     "footer.rights": "© 2026 Légy İstanbul. All rights reserved.",
   };
+  if (SITE.en && typeof SITE.en === "object") Object.assign(EN, SITE.en);
+
+  // ---- Dates --------------------------------------------------------------
+
+  // The date of the night that is on in Istanbul, as "YYYY-MM-DD", whatever the
+  // visitor's own clock says. Until 04:00 the night before is still going.
+  function istanbulNightDate() {
+    const parts = new Intl.DateTimeFormat("en-US", {
+      timeZone: "Europe/Istanbul",
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+    }).formatToParts(new Date(Date.now() - 4 * 60 * 60 * 1000));
+    const part = (type) => parts.find((p) => p.type === type).value;
+    return `${part("year")}-${part("month")}-${part("day")}`;
+  }
+
+  // "YYYY-MM-DD" as a Date at midnight UTC, so the day never shifts with the
+  // visitor's time zone. Read it with getUTC... only.
+  function dayOf(date) {
+    return new Date(`${date}T00:00:00Z`);
+  }
+
+  function addDays(date, days) {
+    const d = dayOf(date);
+    d.setUTCDate(d.getUTCDate() + days);
+    return d.toISOString().slice(0, 10);
+  }
 
   // ---- Reveal on scroll ---------------------------------------------------
 
-  const reveals = document.querySelectorAll(".reveal");
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const revealObserver =
+    reduceMotion || !("IntersectionObserver" in window)
+      ? null
+      : new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (!entry.isIntersecting) return;
+              entry.target.classList.add("is-visible");
+              revealObserver.unobserve(entry.target);
+            });
+          },
+          { threshold: 0.1 },
+        );
 
-  if (reduceMotion || !("IntersectionObserver" in window)) {
-    reveals.forEach((el) => el.classList.add("is-visible"));
-  } else {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (!entry.isIntersecting) return;
-          entry.target.classList.add("is-visible");
-          observer.unobserve(entry.target);
-        });
-      },
-      { threshold: 0.1 },
-    );
-    reveals.forEach((el) => observer.observe(el));
+  // Also used for the lineup cards, which arrive after the page has loaded.
+  function revealOnScroll(el) {
+    if (revealObserver) revealObserver.observe(el);
+    else el.classList.add("is-visible");
   }
+
+  document.querySelectorAll(".reveal").forEach(revealOnScroll);
 
   // Reveal is set up; tells the head script that the page does not need its no-JS fallback.
   document.documentElement.classList.add("js-ready");
@@ -163,18 +220,9 @@
       }
     }
 
-    // Which night it is in Istanbul (0 = Sunday ... 6 = Saturday), whatever the
-    // visitor's own clock says. Until 04:00 the night before is still going.
+    // Which night it is in Istanbul (0 = Sunday ... 6 = Saturday).
     function istanbulNight() {
-      const parts = new Intl.DateTimeFormat("en-US", {
-        timeZone: "Europe/Istanbul",
-        weekday: "short",
-        hour: "numeric",
-        hourCycle: "h23",
-      }).formatToParts(new Date());
-      const part = (type) => parts.find((p) => p.type === type).value;
-      const day = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].indexOf(part("weekday"));
-      return Number(part("hour")) % 24 < 4 ? (day + 6) % 7 : day;
+      return dayOf(istanbulNightDate()).getUTCDay();
     }
 
     // Open tonight: "Tonight · Doors 21:00" with the live dot. Closed: the next
@@ -218,6 +266,8 @@
         a.target = "_blank";
         a.rel = "noopener";
       });
+      // The lineup redraws its dates in the new language.
+      document.dispatchEvent(new CustomEvent("legy:language", { detail: lang }));
     }
 
     document.querySelectorAll(".lang-switch button").forEach((button) => {
@@ -237,6 +287,110 @@
     });
   } catch (error) {
     console.error("site.js: language failed", error);
+  }
+
+  // ---- Lineup -------------------------------------------------------------
+  // Fetches the nights from LINEUP_URL and draws one card per night of the next
+  // LINEUP_DAYS days. With nothing on, or if loading fails, the "coming soon"
+  // line shows instead; the rest of the page is unaffected either way. When
+  // the manager turns the section off, it isn't in the page and nothing loads.
+  try {
+    const grid = document.querySelector("[data-lineup]");
+    const empty = document.querySelector(".nights-empty");
+    const labels = []; // { time, date } for redrawing dates on a language switch
+
+    // The cards are styled in capitals, and in Turkish a capital "i" is "İ".
+    // DJ names and music styles are mostly English ("Nicole", "Indie Dance"),
+    // so they are marked English unless they use letters only Turkish has.
+    function langOf(text) {
+      return /[çğıöşüÇĞİÖŞÜ]/.test(text) ? "tr" : "en";
+    }
+
+    function make(tag, className, text) {
+      const node = document.createElement(tag);
+      if (className) node.className = className;
+      if (text) node.textContent = text;
+      return node;
+    }
+
+    // "Cuma · 28 Kasım" / "Friday · 28 Nov", or "Tonight · 28 Nov".
+    function drawLabels() {
+      const words = NIGHT_TEXT[document.documentElement.lang === "en" ? "en" : "tr"];
+      const tonight = istanbulNightDate();
+      labels.forEach(({ time, date }) => {
+        const day = dayOf(date);
+        const when = date === tonight ? words.tonight : words.days[day.getUTCDay()];
+        time.textContent = `${when} · ${day.getUTCDate()} ${words.months[day.getUTCMonth()]}`;
+      });
+    }
+
+    function card(night, index) {
+      const wrap = make("div", "reveal");
+      wrap.style.setProperty("--reveal-delay", `${Math.min(index, 3) * 80}ms`);
+      const article = make("article", "night-card inset-frame");
+
+      const label = make("p", "micro-label");
+      const time = make("time");
+      time.dateTime = night.date;
+      labels.push({ time, date: night.date });
+      label.append(time);
+
+      const name = make("h3", "night-dj", night.dj);
+      name.lang = langOf(night.dj);
+      article.append(label, name);
+
+      if (night.genres.length) {
+        const tags = make("ul", "tags");
+        night.genres.forEach((genre) => {
+          const tag = make("li", "tag", genre);
+          tag.lang = langOf(genre);
+          tags.append(tag);
+        });
+        article.append(tags);
+      }
+
+      article.append(make("p", "night-time", night.end ? `${night.start} – ${night.end}` : night.start));
+      wrap.append(article);
+      return wrap;
+    }
+
+    function show(nights) {
+      const tonight = istanbulNightDate();
+      const until = addDays(tonight, LINEUP_DAYS);
+      const shown = nights.filter(
+        (n) => n && typeof n.date === "string" && typeof n.dj === "string" && n.date >= tonight && n.date < until,
+      );
+      shown.forEach((n) => {
+        n.genres = Array.isArray(n.genres) ? n.genres.filter((g) => typeof g === "string") : [];
+        n.start = typeof n.start === "string" ? n.start : "";
+        n.end = typeof n.end === "string" ? n.end : "";
+      });
+      grid.replaceChildren(...shown.map(card));
+      grid.dataset.count = String(shown.length);
+      drawLabels();
+      grid.querySelectorAll(".reveal").forEach(revealOnScroll);
+      if (empty) empty.hidden = shown.length > 0;
+    }
+
+    if (grid) {
+      document.addEventListener("legy:language", drawLabels);
+
+      const controller = "AbortController" in window ? new AbortController() : null;
+      const timer = controller ? setTimeout(() => controller.abort(), 8000) : 0;
+      fetch(LINEUP_URL, { headers: { Accept: "application/json" }, signal: controller ? controller.signal : undefined })
+        .then((response) => {
+          if (!response.ok) throw new Error(`HTTP ${response.status}`);
+          return response.json();
+        })
+        .then((data) => show(data && Array.isArray(data.nights) ? data.nights : []))
+        .catch((error) => {
+          console.error("site.js: lineup failed", error);
+          show([]);
+        })
+        .finally(() => clearTimeout(timer));
+    }
+  } catch (error) {
+    console.error("site.js: lineup failed", error);
   }
 
   // ---- Nav ----------------------------------------------------------------

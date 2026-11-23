@@ -1007,6 +1007,24 @@ section[id] {
   font: 500 36px/1.1 var(--font-display);
   letter-spacing: 0.025em;
   text-transform: uppercase;
+  text-wrap: balance;
+  overflow-wrap: anywhere; /* a long one-word name breaks instead of overflowing */
+}
+
+/* No nights in the next 7 days, or the lineup didn't load (site.js). Without
+   JS no cards can be drawn, so the line shows then too. */
+.nights-empty {
+  margin: 48px 0 0;
+  text-align: center;
+  color: var(--cream-muted);
+}
+
+.no-js .nights-empty {
+  display: block;
+}
+
+.nights-grid:empty {
+  margin-top: 0;
 }
 
 .tags {
@@ -1035,13 +1053,42 @@ section[id] {
   color: var(--cream-muted);
 }
 
+/* Wider screens: cards in rows of three, centred, so one or two nights sit in
+   the middle. Four nights (a typical week) make one row of four on computers
+   and two rows of two on tablets. site.js sets data-count. */
 @media (min-width: 768px) {
   .nights-grid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    --per-row: 3;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .nights-grid > * {
+    flex: 0 0 calc((100% - (var(--per-row) - 1) * 24px) / var(--per-row));
+    min-width: 0;
+  }
+
+  .nights-grid[data-count="4"] {
+    --per-row: 2;
   }
 
   .night-card {
     min-width: 0;
+  }
+}
+
+@media (min-width: 1024px) {
+  .nights-grid[data-count="4"] {
+    --per-row: 4;
+  }
+
+  .nights-grid[data-count="4"] .night-card {
+    padding: 40px 24px;
+  }
+
+  .nights-grid[data-count="4"] .night-dj {
+    font-size: 30px;
   }
 }
 
@@ -1327,6 +1374,77 @@ section[id] {
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--cream-muted);
+}
+
+/* The map box as a link to the venue on Google Maps (functions/index.js) */
+.map-link {
+  flex-direction: column;
+  gap: 12px;
+  color: var(--gold);
+  text-decoration: none;
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
+}
+
+.map-link .icon {
+  width: 32px;
+  height: 32px;
+}
+
+.map-link:hover,
+.map-link:focus-visible {
+  background: var(--night);
+  color: var(--cream);
+}
+
+/* The embedded Google map (functions/index.js). It sits exactly inside the
+   inset frame line, like the placeholder. Google only draws its maps light, so
+   it is inverted to a dark map; turning the hues back keeps water blue and
+   the pin red. */
+.map-embed {
+  position: absolute;
+  inset: 16px;
+  width: calc(100% - 32px);
+  height: calc(100% - 32px);
+  border: 0;
+  background: var(--night-3);
+  filter: invert(0.9) hue-rotate(180deg) saturate(0.7);
+}
+
+/* High enough to leave Google's logo and map credits at the bottom visible:
+   Google's terms don't allow covering them. */
+.map-directions {
+  position: absolute;
+  bottom: 80px;
+  left: 50%;
+  z-index: 3;
+  gap: 8px;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+}
+
+@media (min-width: 1024px) {
+  .map-embed {
+    inset: 24px;
+    width: calc(100% - 48px);
+    height: calc(100% - 48px);
+  }
+
+  .map-directions {
+    bottom: 88px;
+  }
+}
+
+.visit-text a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.visit-text a:hover,
+.visit-text a:focus-visible {
+  color: var(--cream);
 }
 
 @media (min-width: 768px) {
