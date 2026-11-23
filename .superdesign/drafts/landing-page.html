@@ -1,0 +1,486 @@
+<!DOCTYPE html><html lang="en" class="scroll-smooth"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Légy İstanbul — The art of a good night.</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&amp;family=Lato:wght@400;700&amp;display=swap" rel="stylesheet">
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      colors: {
+        'night': '#0e0a0a',
+        'night-2': '#171010',
+        'night-3': '#221616',
+        'legy-red': '#a51e22',
+        'legy-red-deep': '#7a1418',
+        'glow-red': '#e0242b',
+        'gold': '#d5ba8e',
+        'cream': '#f8f4e8',
+        'cream-muted': 'rgba(248, 244, 232, 0.64)',
+        'line': 'rgba(213, 186, 142, 0.22)',
+        'neon': '#ffc928'
+      },
+      fontFamily: {
+        display: ['"Cormorant Garamond"', 'serif'],
+        body: ['Lato', 'sans-serif']
+      },
+      boxShadow: {
+        'glow': '0 0 36px rgba(224, 36, 43, 0.45)'
+      },
+      animation: {
+        'marquee': 'marquee 40s linear infinite',
+        'breathe': 'breathe 6s ease-in-out infinite',
+        'fade-up': 'fadeUp 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) forwards'
+      },
+      keyframes: {
+        marquee: {
+          '0%': { transform: 'translateX(0%)' },
+          '100%': { transform: 'translateX(-50%)' }
+        },
+        breathe: {
+          '0%, 100%': { opacity: '0.4' },
+          '50%': { opacity: '0.8' }
+        },
+        fadeUp: {
+          '0%': { opacity: '0', transform: 'translateY(24px)' },
+          '100%': { opacity: '1', transform: 'translateY(0)' }
+        }
+      }
+    }
+  }
+}
+</script>
+<style>
+  body { background-color: #0e0a0a; color: #f8f4e8; font-family: 'Lato', sans-serif; }
+  .micro-label { font-family: 'Lato', sans-serif; font-weight: 700; font-size: 11px; text-transform: uppercase; letter-spacing: 0.32em; color: #d5ba8e; }
+  .btn-primary { background-color: #a51e22; color: #f8f4e8; font-family: 'Lato', sans-serif; font-weight: 700; font-size: 13px; text-transform: uppercase; letter-spacing: 0.18em; padding: 16px 28px; border-radius: 999px; display: inline-flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.3s ease; }
+  .btn-primary:hover { box-shadow: 0 0 36px rgba(224,36,43,.45); transform: translateY(-2px); }
+  .btn-secondary { border: 1px solid #d5ba8e; color: #d5ba8e; font-family: 'Lato', sans-serif; font-weight: 700; font-size: 13px; text-transform: uppercase; letter-spacing: 0.18em; padding: 16px 28px; border-radius: 999px; display: inline-flex; align-items: center; justify-content: center; transition: all 0.3s ease; background: transparent; }
+  .btn-secondary:hover { background-color: #d5ba8e; color: #0e0a0a; }
+  .inset-frame { position: relative; }
+  .inset-frame::after { content: ''; position: absolute; inset: 16px; border: 1px solid rgba(213, 186, 142, 0.22); pointer-events: none; }
+  @media (min-width: 1024px) { .inset-frame::after { inset: 24px; } }
+  .img-hover { transition: transform 0.8s ease; }
+  .img-hover:hover { transform: scale(1.03); }
+  .vignette { position: relative; }
+  .vignette::before { content: ''; position: absolute; inset: 0; box-shadow: inset 0 0 40px rgba(14, 10, 10, 0.5); z-index: 10; pointer-events: none; }
+  .scroll-reveal { opacity: 0; }
+  @media (prefers-reduced-motion: reduce) { *, ::before, ::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; } }
+</style>
+</head>
+<body>
+  <div class="min-h-screen bg-night overflow-x-hidden selection:bg-legy-red selection:text-cream" data-sd-id="1">
+
+    <!-- Nav -->
+    <nav class="fixed top-0 left-0 right-0 z-50 transition-all duration-300 bg-night/90 backdrop-blur-md border-b border-line" data-sd-id="2">
+      <div class="max-w-[1240px] mx-auto px-5 lg:px-12 h-20 flex items-center justify-between" data-sd-id="3">
+        <a href="#" id="nav-home" class="flex-shrink-0" data-sd-id="4">
+          <img src="https://vgbujcuwptvheqijyjbe.supabase.co/storage/v1/object/public/hmac-uploads/projects/8fac95a5-96a7-419a-942a-707bff59d262/brand-assets/brand-legy-logo-cream/legy-logo-cream.png" alt="Légy Logo" class="h-8 w-auto object-contain" data-sd-id="5">
+        </a>
+        <div class="hidden md:flex items-center gap-8" data-sd-id="6">
+          <a href="#nights" id="nav-nights" class="text-[13px] font-bold tracking-[0.18em] uppercase hover:text-gold transition-colors" data-sd-id="7">Nights</a>
+          <a href="#cocktails" id="nav-cocktails" class="text-[13px] font-bold tracking-[0.18em] uppercase hover:text-gold transition-colors" data-sd-id="8">Cocktails</a>
+          <a href="#kitchen" id="nav-kitchen" class="text-[13px] font-bold tracking-[0.18em] uppercase hover:text-gold transition-colors" data-sd-id="9">Kitchen</a>
+          <a href="#gallery" id="nav-gallery" class="text-[13px] font-bold tracking-[0.18em] uppercase hover:text-gold transition-colors" data-sd-id="10">Gallery</a>
+          <a href="#visit" id="nav-visit" class="text-[13px] font-bold tracking-[0.18em] uppercase hover:text-gold transition-colors" data-sd-id="11">Visit</a>
+        </div>
+        <div class="flex items-center gap-4" data-sd-id="12">
+          <div class="hidden sm:flex p-[3px] rounded-full border border-line bg-night-2 items-center" data-sd-id="13">
+            <button class="px-3 py-1.5 rounded-full text-xs font-bold tracking-[0.06em] text-cream/75 hover:text-cream transition-colors" data-sd-id="14">TR</button>
+            <button class="px-3 py-1.5 rounded-full text-xs font-bold tracking-[0.06em] bg-gold text-night" data-sd-id="15">EN</button>
+          </div>
+          <a href="#reserve" id="nav-reserve" class="btn-primary !px-5 !py-2.5 !text-[11px]" data-sd-id="16">
+            <iconify-icon icon="logos:whatsapp-icon" class="text-lg"></iconify-icon>
+            Reserve
+          </a>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Hero -->
+    <section class="relative min-h-screen pt-32 pb-20 flex flex-col justify-center items-center overflow-hidden" data-sd-id="17">
+      <div class="absolute inset-0 z-0 flex items-center justify-center pointer-events-none" data-sd-id="18">
+        <div class="w-[800px] h-[800px] rounded-full bg-glow-red/30 blur-[120px] animate-breathe" data-sd-id="19"></div>
+      </div>
+      
+      <div class="max-w-[1240px] mx-auto w-full px-5 lg:px-12 relative z-10 grid lg:grid-cols-2 gap-12 items-center" data-sd-id="20">
+        <div class="flex flex-col items-start space-y-8 animate-fade-up" style="animation-delay: 0.1s;" data-sd-id="21">
+          <img src="https://vgbujcuwptvheqijyjbe.supabase.co/storage/v1/object/public/hmac-uploads/projects/8fac95a5-96a7-419a-942a-707bff59d262/brand-assets/brand-legy-logo-cream/legy-logo-cream.png" alt="Légy Logo" class="w-64 md:w-80 object-contain mb-4" data-sd-id="22">
+          
+          <div class="space-y-4" data-sd-id="23">
+            <p class="micro-label" data-sd-id="24">The art of a good night</p>
+            <h1 class="font-display font-medium text-[44px] leading-none tracking-[0.04em] md:text-[72px] lg:text-[96px] uppercase" data-sd-id="25">
+              Live DJs.<br>
+              Signature cocktails.<br>
+              <span class="italic font-normal" data-sd-id="26">Late nights.</span>
+            </h1>
+          </div>
+
+          <div class="flex items-center gap-3" data-sd-id="27">
+            <div class="w-2 h-2 rounded-full bg-neon shadow-[0_0_8px_rgba(255,201,40,0.8)]" data-sd-id="28"></div>
+            <p class="micro-label !text-cream" data-sd-id="29">Tonight · Doors 21:00</p>
+          </div>
+
+          <div class="flex flex-col sm:flex-row gap-4 pt-4" data-sd-id="30">
+            <a href="#reserve" id="hero-reserve" class="btn-primary" data-sd-id="31">
+              <iconify-icon icon="logos:whatsapp-icon" class="text-xl"></iconify-icon>
+              Reserve on WhatsApp
+            </a>
+            <a href="/menu" id="hero-menu" class="btn-secondary" data-sd-id="32">
+              See the menu
+            </a>
+          </div>
+        </div>
+
+        <div class="relative h-[600px] w-full hidden lg:block animate-fade-up" style="animation-delay: 0.3s;" data-sd-id="33">
+          <div class="absolute top-0 right-0 w-[60%] h-[70%] z-20 vignette overflow-hidden" data-sd-id="34">
+            <img src="https://vgbujcuwptvheqijyjbe.supabase.co/storage/v1/object/public/hmac-uploads/projects/8fac95a5-96a7-419a-942a-707bff59d262/content-assets/photos-legy4/legy4.jpg" alt="DJ at Légy" class="w-full h-full object-cover img-hover" data-sd-id="35">
+          </div>
+          <div class="absolute bottom-0 left-10 w-[55%] h-[60%] z-30 vignette overflow-hidden" data-sd-id="36">
+            <img src="https://vgbujcuwptvheqijyjbe.supabase.co/storage/v1/object/public/hmac-uploads/projects/8fac95a5-96a7-419a-942a-707bff59d262/content-assets/photos-legy3/legy3.jpg" alt="Neon Smiley Crowd" class="w-full h-full object-cover img-hover" data-sd-id="37">
+          </div>
+          <div class="absolute top-1/2 left-0 -translate-y-1/2 w-[35%] h-[40%] z-10 vignette overflow-hidden" data-sd-id="38">
+            <img src="https://vgbujcuwptvheqijyjbe.supabase.co/storage/v1/object/public/hmac-uploads/projects/8fac95a5-96a7-419a-942a-707bff59d262/content-assets/photos-legy0/legy0.jpg" alt="Bar details" class="w-full h-full object-cover img-hover" data-sd-id="39">
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Marquee -->
+    <div class="w-full overflow-hidden bg-night-2 py-4 border-y border-line" data-sd-id="40">
+      <div class="whitespace-nowrap flex w-[200%] animate-marquee hover:[animation-play-state:paused]" data-sd-id="41">
+        <div class="w-1/2 flex justify-around items-center" data-sd-id="42">
+          <span class="micro-label !text-cream" data-sd-id="43">LIVE DJS</span>
+          <span class="text-gold" data-sd-id="44">·</span>
+          <span class="micro-label !text-cream" data-sd-id="45">SIGNATURE COCKTAILS</span>
+          <span class="text-gold" data-sd-id="46">·</span>
+          <span class="micro-label !text-cream" data-sd-id="47">KITCHEN</span>
+          <span class="text-gold" data-sd-id="48">·</span>
+          <span class="micro-label !text-cream" data-sd-id="49">THE ART OF A GOOD NIGHT</span>
+          <span class="text-gold" data-sd-id="50">·</span>
+        </div>
+        <div class="w-1/2 flex justify-around items-center" data-sd-id="51">
+          <span class="micro-label !text-cream" data-sd-id="52">LIVE DJS</span>
+          <span class="text-gold" data-sd-id="53">·</span>
+          <span class="micro-label !text-cream" data-sd-id="54">SIGNATURE COCKTAILS</span>
+          <span class="text-gold" data-sd-id="55">·</span>
+          <span class="micro-label !text-cream" data-sd-id="56">KITCHEN</span>
+          <span class="text-gold" data-sd-id="57">·</span>
+          <span class="micro-label !text-cream" data-sd-id="58">THE ART OF A GOOD NIGHT</span>
+          <span class="text-gold" data-sd-id="59">·</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Intro -->
+    <section class="py-20 lg:py-32 px-5 lg:px-12 max-w-[1240px] mx-auto" data-sd-id="60">
+      <div class="grid md:grid-cols-2 gap-12 items-center" data-sd-id="61">
+        <div class="space-y-6" data-sd-id="62">
+          <h2 class="font-display text-3xl md:text-5xl uppercase tracking-[0.04em] leading-snug" data-sd-id="63">
+            A sanctuary for the night.<br>
+            Where rhythm meets refinement.
+          </h2>
+          <p class="text-[17px] leading-[1.6] text-cream-muted max-w-md" data-sd-id="64">
+            Légy İstanbul is an immersion into sound, taste, and atmosphere. Step through the doors and leave the city behind.
+          </p>
+        </div>
+        <div class="aspect-[4/5] relative vignette overflow-hidden inset-frame bg-night-2 p-2" data-sd-id="65">
+          <img src="https://vgbujcuwptvheqijyjbe.supabase.co/storage/v1/object/public/hmac-uploads/projects/8fac95a5-96a7-419a-942a-707bff59d262/content-assets/photos-legy5/legy5.jpg" alt="Guest with martinis" class="w-full h-full object-cover img-hover" data-sd-id="66">
+        </div>
+      </div>
+    </section>
+
+    <!-- Nights -->
+    <section id="nights" class="py-20 lg:py-32 bg-night" data-sd-id="67">
+      <div class="max-w-[1240px] mx-auto px-5 lg:px-12 space-y-16" data-sd-id="68">
+        <div class="text-center space-y-4" data-sd-id="69">
+          <p class="micro-label" data-sd-id="70">Weekly Lineup</p>
+          <h2 class="font-display text-4xl lg:text-5xl uppercase tracking-[0.06em] flex items-center justify-center gap-4" data-sd-id="71">
+            <span class="h-px w-12 bg-line" data-sd-id="72"></span>
+            Nights
+            <span class="h-px w-12 bg-line" data-sd-id="73"></span>
+          </h2>
+        </div>
+
+        <div class="grid md:grid-cols-3 gap-6" data-sd-id="74">
+          <!-- Card 1 -->
+          <div class="bg-night-2 p-10 inset-frame hover:bg-night-3 transition-colors duration-500 group flex flex-col items-center text-center space-y-6" data-sd-id="75">
+            <p class="micro-label" data-sd-id="76">Thursday</p>
+            <h3 class="font-display text-4xl uppercase tracking-wide" data-sd-id="77">Kaan Düzarat</h3>
+            <div class="flex flex-wrap justify-center gap-2" data-sd-id="78">
+              <span class="px-3 py-1 rounded-full border border-line text-[11px] font-bold uppercase tracking-wider text-cream-muted" data-sd-id="79">House</span>
+              <span class="px-3 py-1 rounded-full border border-line text-[11px] font-bold uppercase tracking-wider text-cream-muted" data-sd-id="80">Disco</span>
+            </div>
+            <p class="text-[15px] text-cream-muted mt-auto pt-4 border-t border-line/50 w-full" data-sd-id="81">23:00 – 04:00</p>
+          </div>
+          <!-- Card 2 -->
+          <div class="bg-night-2 p-10 inset-frame hover:bg-night-3 transition-colors duration-500 group flex flex-col items-center text-center space-y-6" data-sd-id="82">
+            <p class="micro-label" data-sd-id="83">Friday</p>
+            <h3 class="font-display text-4xl uppercase tracking-wide" data-sd-id="84">Oceanvs Orientalis</h3>
+            <div class="flex flex-wrap justify-center gap-2" data-sd-id="85">
+              <span class="px-3 py-1 rounded-full border border-line text-[11px] font-bold uppercase tracking-wider text-cream-muted" data-sd-id="86">Afro House</span>
+              <span class="px-3 py-1 rounded-full border border-line text-[11px] font-bold uppercase tracking-wider text-cream-muted" data-sd-id="87">Electronic</span>
+            </div>
+            <p class="text-[15px] text-cream-muted mt-auto pt-4 border-t border-line/50 w-full" data-sd-id="88">23:00 – 04:00</p>
+          </div>
+          <!-- Card 3 -->
+          <div class="bg-night-2 p-10 inset-frame hover:bg-night-3 transition-colors duration-500 group flex flex-col items-center text-center space-y-6" data-sd-id="89">
+            <p class="micro-label" data-sd-id="90">Saturday</p>
+            <h3 class="font-display text-4xl uppercase tracking-wide" data-sd-id="91">Carlita</h3>
+            <div class="flex flex-wrap justify-center gap-2" data-sd-id="92">
+              <span class="px-3 py-1 rounded-full border border-line text-[11px] font-bold uppercase tracking-wider text-cream-muted" data-sd-id="93">Indie Dance</span>
+            </div>
+            <p class="text-[15px] text-cream-muted mt-auto pt-4 border-t border-line/50 w-full" data-sd-id="94">23:00 – 04:00</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Cocktails -->
+    <section id="cocktails" class="py-20 lg:py-32 bg-night-2 border-y border-line" data-sd-id="95">
+      <div class="max-w-[1240px] mx-auto px-5 lg:px-12 grid lg:grid-cols-12 gap-12 lg:gap-20 items-center" data-sd-id="96">
+        <div class="lg:col-span-7 space-y-12" data-sd-id="97">
+          <div class="space-y-4" data-sd-id="98">
+            <p class="micro-label" data-sd-id="99">From the Bar</p>
+            <h2 class="font-display text-4xl lg:text-5xl uppercase tracking-[0.06em] flex items-center gap-4" data-sd-id="100">
+              Signature Cocktails
+              <span class="h-px flex-1 bg-line" data-sd-id="101"></span>
+            </h2>
+          </div>
+
+          <ul class="space-y-8" data-sd-id="102">
+            <li class="flex flex-col sm:flex-row sm:items-baseline justify-between gap-2" data-sd-id="103">
+              <div class="max-w-[80%]" data-sd-id="104">
+                <h4 class="font-display text-2xl uppercase tracking-wide" data-sd-id="105">Verde</h4>
+                <p class="text-[15px] text-cream-muted leading-relaxed mt-1" data-sd-id="106">Beefeater · homemade elderflower liqueur · sorrel · green apple · citrus</p>
+              </div>
+              <span class="text-gold font-body font-bold shrink-0" data-sd-id="107">1.300 ₺</span>
+            </li>
+            <li class="flex flex-col sm:flex-row sm:items-baseline justify-between gap-2" data-sd-id="108">
+              <div class="max-w-[80%]" data-sd-id="109">
+                <h4 class="font-display text-2xl uppercase tracking-wide" data-sd-id="110">Ritmo</h4>
+                <p class="text-[15px] text-cream-muted leading-relaxed mt-1" data-sd-id="111">Código · Ojo de Tigre · Aperol · passion fruit · pineapple · lime · chili</p>
+              </div>
+              <span class="text-gold font-body font-bold shrink-0" data-sd-id="112">1.300 ₺</span>
+            </li>
+            <li class="flex flex-col sm:flex-row sm:items-baseline justify-between gap-2" data-sd-id="113">
+              <div class="max-w-[80%]" data-sd-id="114">
+                <h4 class="font-display text-2xl uppercase tracking-wide" data-sd-id="115">Mora</h4>
+                <p class="text-[15px] text-cream-muted leading-relaxed mt-1" data-sd-id="116">Absolut · blackberry, raspberry &amp; blueberry liqueur · bergamot · lime</p>
+              </div>
+              <span class="text-gold font-body font-bold shrink-0" data-sd-id="117">1.300 ₺</span>
+            </li>
+            <li class="flex flex-col sm:flex-row sm:items-baseline justify-between gap-2" data-sd-id="118">
+              <div class="max-w-[80%]" data-sd-id="119">
+                <h4 class="font-display text-2xl uppercase tracking-wide" data-sd-id="120">Fake Paloma</h4>
+                <p class="text-[15px] text-cream-muted leading-relaxed mt-1" data-sd-id="121">Código · Ojo de Tigre · Campari · grapefruit · soda</p>
+              </div>
+              <span class="text-gold font-body font-bold shrink-0" data-sd-id="122">1.300 ₺</span>
+            </li>
+            <li class="flex flex-col sm:flex-row sm:items-baseline justify-between gap-2" data-sd-id="123">
+              <div class="max-w-[80%]" data-sd-id="124">
+                <h4 class="font-display text-2xl uppercase tracking-wide" data-sd-id="125">Bite</h4>
+                <p class="text-[15px] text-cream-muted leading-relaxed mt-1" data-sd-id="126">Chivas Extra Smooth &amp; Smokey · Lapsang Souchong · pear &amp; ginger cordial · lemon</p>
+              </div>
+              <span class="text-gold font-body font-bold shrink-0" data-sd-id="127">1.300 ₺</span>
+            </li>
+          </ul>
+
+          <div class="pt-4" data-sd-id="128">
+            <a href="/menu" id="cocktails-menu" class="btn-secondary" data-sd-id="129">
+              See the full menu
+            </a>
+          </div>
+        </div>
+
+        <div class="lg:col-span-5 relative grid grid-cols-2 gap-4 h-[600px]" data-sd-id="130">
+           <div class="col-span-2 relative vignette overflow-hidden inset-frame h-[400px]" data-sd-id="131">
+             <img src="https://vgbujcuwptvheqijyjbe.supabase.co/storage/v1/object/public/hmac-uploads/projects/8fac95a5-96a7-419a-942a-707bff59d262/content-assets/photos-legy2/legy2.jpg" alt="Close up red cocktail" class="w-full h-full object-cover img-hover" data-sd-id="132">
+           </div>
+           <div class="col-span-1 relative vignette overflow-hidden col-start-2 -mt-20 z-10 border-[6px] border-night-2 h-[280px]" data-sd-id="133">
+             <img src="https://vgbujcuwptvheqijyjbe.supabase.co/storage/v1/object/public/hmac-uploads/projects/8fac95a5-96a7-419a-942a-707bff59d262/content-assets/photos-legy1/legy1.jpg" alt="Tray of cocktails" class="w-full h-full object-cover img-hover" data-sd-id="134">
+           </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Kitchen -->
+    <section id="kitchen" class="py-20 lg:py-32 bg-night" data-sd-id="135">
+      <div class="max-w-[800px] mx-auto px-5 lg:px-12" data-sd-id="136">
+        <div class="text-center space-y-4 mb-16" data-sd-id="137">
+          <p class="micro-label" data-sd-id="138">Late Bites</p>
+          <h2 class="font-display text-4xl lg:text-5xl uppercase tracking-[0.06em] flex items-center justify-center gap-4" data-sd-id="139">
+            <span class="h-px w-12 bg-line" data-sd-id="140"></span>
+            Kitchen
+            <span class="h-px w-12 bg-line" data-sd-id="141"></span>
+          </h2>
+          <p class="text-[15px] text-cream-muted" data-sd-id="142">Served until 02:00</p>
+        </div>
+
+        <div class="space-y-6" data-sd-id="143">
+          <!-- Item -->
+          <div class="flex justify-between items-baseline py-4 border-b border-line" data-sd-id="144">
+            <h4 class="font-display text-xl uppercase tracking-wide" data-sd-id="145">Wagyu Sliders</h4>
+            <span class="text-gold font-body font-bold ml-4" data-sd-id="146">850 ₺</span>
+          </div>
+          <!-- Item -->
+          <div class="flex justify-between items-baseline py-4 border-b border-line" data-sd-id="147">
+            <h4 class="font-display text-xl uppercase tracking-wide" data-sd-id="148">Truffle Fries</h4>
+            <span class="text-gold font-body font-bold ml-4" data-sd-id="149">450 ₺</span>
+          </div>
+          <!-- Item -->
+          <div class="flex justify-between items-baseline py-4 border-b border-line" data-sd-id="150">
+            <h4 class="font-display text-xl uppercase tracking-wide" data-sd-id="151">Crispy Calamari</h4>
+            <span class="text-gold font-body font-bold ml-4" data-sd-id="152">600 ₺</span>
+          </div>
+          <!-- Item -->
+          <div class="flex justify-between items-baseline py-4 border-b border-line" data-sd-id="153">
+            <h4 class="font-display text-xl uppercase tracking-wide" data-sd-id="154">Burrata Plate</h4>
+            <span class="text-gold font-body font-bold ml-4" data-sd-id="155">750 ₺</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Gallery -->
+    <section id="gallery" class="py-10 bg-night-2" data-sd-id="156">
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-1 md:gap-2" data-sd-id="157">
+        <div class="aspect-[4/5] relative overflow-hidden group" data-sd-id="158">
+          <img src="https://vgbujcuwptvheqijyjbe.supabase.co/storage/v1/object/public/hmac-uploads/projects/8fac95a5-96a7-419a-942a-707bff59d262/content-assets/photos-legy0/legy0.jpg" alt="Gallery" class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110" data-sd-id="159">
+          <div class="absolute inset-0 bg-night/30 opacity-0 group-hover:opacity-100 transition-opacity duration-500" data-sd-id="160"></div>
+        </div>
+        <div class="aspect-[4/5] relative overflow-hidden group" data-sd-id="161">
+          <img src="https://vgbujcuwptvheqijyjbe.supabase.co/storage/v1/object/public/hmac-uploads/projects/8fac95a5-96a7-419a-942a-707bff59d262/content-assets/photos-legy3/legy3.jpg" alt="Gallery" class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110" data-sd-id="162">
+          <div class="absolute inset-0 bg-night/30 opacity-0 group-hover:opacity-100 transition-opacity duration-500" data-sd-id="163"></div>
+        </div>
+        <div class="aspect-[4/5] relative overflow-hidden group hidden md:block" data-sd-id="164">
+          <img src="https://vgbujcuwptvheqijyjbe.supabase.co/storage/v1/object/public/hmac-uploads/projects/8fac95a5-96a7-419a-942a-707bff59d262/content-assets/photos-legy4/legy4.jpg" alt="Gallery" class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110" data-sd-id="165">
+          <div class="absolute inset-0 bg-night/30 opacity-0 group-hover:opacity-100 transition-opacity duration-500" data-sd-id="166"></div>
+        </div>
+        <div class="aspect-[4/5] relative overflow-hidden group hidden md:block" data-sd-id="167">
+          <img src="https://vgbujcuwptvheqijyjbe.supabase.co/storage/v1/object/public/hmac-uploads/projects/8fac95a5-96a7-419a-942a-707bff59d262/content-assets/photos-legy5/legy5.jpg" alt="Gallery" class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110" data-sd-id="168">
+          <div class="absolute inset-0 bg-night/30 opacity-0 group-hover:opacity-100 transition-opacity duration-500" data-sd-id="169"></div>
+        </div>
+      </div>
+      <div class="text-center mt-12 mb-8" data-sd-id="170">
+        <a href="https://www.instagram.com/legyistanbul" target="_blank" rel="noopener" id="gallery-insta" class="inline-flex items-center gap-2 text-[13px] font-bold tracking-[0.18em] uppercase hover:text-gold transition-colors" data-sd-id="171">
+          <iconify-icon icon="mdi:instagram" class="text-xl"></iconify-icon>
+          Follow @legyistanbul
+        </a>
+      </div>
+    </section>
+
+    <!-- Reserve Band -->
+    <section id="reserve" class="bg-legy-red py-20 px-5 relative overflow-hidden" data-sd-id="172">
+      <div class="absolute inset-0 bg-gradient-to-br from-legy-red to-legy-red-deep pointer-events-none" data-sd-id="173"></div>
+      <div class="max-w-[800px] mx-auto text-center relative z-10 space-y-8" data-sd-id="174">
+        <h2 class="font-display text-4xl md:text-5xl lg:text-6xl uppercase tracking-[0.04em] leading-tight" data-sd-id="175">
+          Your table is one<br>message away.
+        </h2>
+        <p class="text-cream/80 text-[15px] max-w-md mx-auto" data-sd-id="176">
+          Contact us directly for table reservations, bottle service, and large group inquiries.
+        </p>
+        <a href="#" id="band-whatsapp" class="inline-flex items-center justify-center gap-3 bg-cream text-legy-red hover:bg-white hover:scale-105 transition-all duration-300 font-body font-bold text-[13px] uppercase tracking-[0.18em] px-8 py-4 rounded-full shadow-xl" data-sd-id="177">
+          <iconify-icon icon="logos:whatsapp-icon" class="text-2xl"></iconify-icon>
+          Message Us
+        </a>
+      </div>
+    </section>
+
+    <!-- Visit -->
+    <section id="visit" class="py-20 lg:py-32 bg-night" data-sd-id="178">
+      <div class="max-w-[1240px] mx-auto px-5 lg:px-12 grid md:grid-cols-2 gap-16" data-sd-id="179">
+        <div class="space-y-12" data-sd-id="180">
+          <div class="space-y-4" data-sd-id="181">
+            <p class="micro-label" data-sd-id="182">Location</p>
+            <h2 class="font-display text-4xl lg:text-5xl uppercase tracking-[0.06em]" data-sd-id="183">
+              Visit
+            </h2>
+          </div>
+
+          <div class="space-y-8" data-sd-id="184">
+            <div class="space-y-2" data-sd-id="185">
+              <h4 class="micro-label !text-cream" data-sd-id="186">Address</h4>
+              <p class="text-[17px] leading-relaxed text-cream-muted" data-sd-id="187">
+                Placeholder Sokak No: 12<br>
+                Beyoğlu, Istanbul
+              </p>
+            </div>
+
+            <div class="space-y-4" data-sd-id="188">
+              <h4 class="micro-label !text-cream" data-sd-id="189">Hours</h4>
+              <div class="flex justify-between items-center py-3 border-b border-line text-[15px]" data-sd-id="190">
+                <span class="text-cream-muted" data-sd-id="191">Wednesday – Saturday</span>
+                <span class="font-bold" data-sd-id="192">21:00 – 04:00</span>
+              </div>
+            </div>
+
+            <div class="space-y-2" data-sd-id="193">
+              <h4 class="micro-label !text-cream" data-sd-id="194">Door Policy</h4>
+              <p class="text-[15px] text-cream-muted" data-sd-id="195">21+ / Smart casual attire required.</p>
+            </div>
+            
+            <div class="space-y-2" data-sd-id="196">
+              <h4 class="micro-label !text-cream" data-sd-id="197">Phone</h4>
+              <p class="text-[17px] text-cream-muted" data-sd-id="198">+90 555 123 45 67</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-night-2 inset-frame relative min-h-[400px] flex items-center justify-center" data-sd-id="199">
+          <div class="absolute inset-0 bg-night-3 border border-line m-4 md:m-6 opacity-50 flex items-center justify-center" data-sd-id="200">
+             <p class="text-cream-muted uppercase tracking-widest text-sm" data-sd-id="201">[ Map Placeholder ]</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-night border-t border-line py-16" data-sd-id="202">
+      <div class="max-w-[1240px] mx-auto px-5 lg:px-12 flex flex-col items-center justify-center space-y-10 text-center" data-sd-id="203">
+        <img src="https://vgbujcuwptvheqijyjbe.supabase.co/storage/v1/object/public/hmac-uploads/projects/8fac95a5-96a7-419a-942a-707bff59d262/brand-assets/brand-legy-logo-cream/legy-logo-cream.png" alt="Légy Logo" class="w-32 object-contain" data-sd-id="204">
+        
+        <p class="micro-label !text-cream !tracking-[0.4em]" data-sd-id="205">LÉGY · İSTANBUL</p>
+        
+        <div class="flex items-center gap-8" data-sd-id="206">
+          <a href="https://www.instagram.com/legyistanbul" id="footer-ig" class="text-cream-muted hover:text-gold transition-colors" data-sd-id="207">
+            <iconify-icon icon="mdi:instagram" class="text-2xl"></iconify-icon>
+          </a>
+          <a href="/menu" id="footer-menu" class="text-[11px] font-bold tracking-[0.18em] uppercase text-cream-muted hover:text-gold transition-colors" data-sd-id="208">Menu</a>
+        </div>
+        
+        <p class="text-[13px] text-cream-muted/50" data-sd-id="209">
+          © 2026 Légy İstanbul. All rights reserved.
+        </p>
+      </div>
+    </footer>
+
+  </div>
+
+  <script>
+    // Simple scroll reveal observer
+    document.addEventListener("DOMContentLoaded", () => {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('animate-fade-up');
+            entry.target.classList.remove('opacity-0');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.1 });
+
+      document.querySelectorAll('section').forEach((section, index) => {
+        if(index > 0) { // skip hero
+            section.classList.add('opacity-0');
+            observer.observe(section);
+        }
+      });
+    });
+  </script>
+
+</body></html>

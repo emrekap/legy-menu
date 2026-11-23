@@ -1,0 +1,42 @@
+{
+  "schemaVersion": 1,
+  "targets": {
+    "/ (marketing homepage)": {
+      "targetKind": "new-target",
+      "projectId": "8fac95a5-96a7-419a-942a-707bff59d262",
+      "activeDraftId": "421c9ce9-b9bd-4873-b586-4bb25fab2202",
+      "designSystemPath": ".superdesign/design-system.md",
+      "referenceIds": [
+        "brand-legy-logo-cream",
+        "ea174660-9a28-49ab-b841-44bf2a298637",
+        "73445e34-b576-49b0-81a0-d249b9d935cd",
+        "8a479c31-09b3-4f48-bc6b-332ca5d97a6f",
+        "819d03e7-8db8-488d-a42e-33bdd2cf0a73",
+        "aaeee2ae-4e41-49ad-bd5d-c4abd7678f95",
+        "77c953ac-db8f-43af-9db0-d5de3f327e63"
+      ],
+      "brandAssets": {
+        "logo": {
+          "assetKey": "brand-legy-logo-cream",
+          "url": "https://vgbujcuwptvheqijyjbe.supabase.co/storage/v1/object/public/hmac-uploads/projects/8fac95a5-96a7-419a-942a-707bff59d262/brand-assets/brand-legy-logo-cream/legy-logo-cream.png",
+          "sourcePath": "menu-en.pdf"
+        }
+      },
+      "contextFiles": [".superdesign/design-system.md", "index.html"],
+      "fingerprints": {
+        ".superdesign/design-system.md": "78cf5510d51e94b3c15d6715cb856bd60add9e8876300060202492846fe06a78",
+        "index.html": "cf024b63fe725ed8aa6b2a07205cce597d3664c2e0d221139de11878c2b91646"
+      },
+      "components": [],
+      "drafts": {
+        "421c9ce9-b9bd-4873-b586-4bb25fab2202": {
+          "title": "Légy İstanbul - Landing Page",
+          "visualDirection": "after-dark red: near-black, Legy red, champagne gold, cream; Cormorant Garamond + Lato",
+          "model": "gemini-3.1-pro",
+          "currentVersion": 1
+        }
+      },
+      "updatedAt": "2026-11-21T16:05:51Z"
+    }
+  }
+}
