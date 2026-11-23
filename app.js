@@ -9,7 +9,7 @@
 import { analyzePage, planColumn } from "./layout.js";
 
 // One PDF per language. To add a language, add a line here and a button with
-// the same data-lang in index.html.
+// the same data-lang in menu.html.
 const MENUS = {
   tr: {
     file: "menu-tr.pdf",
@@ -567,7 +567,7 @@ function matchBackground(canvas) {
   const right = ctx.getImageData(canvas.width - 3, 2, 1, 1).data;
   const diff =
     Math.abs(left[0] - right[0]) + Math.abs(left[1] - right[1]) + Math.abs(left[2] - right[2]);
-  if (diff > 30) return; // corners differ, keep the default from index.html
+  if (diff > 30) return; // corners differ, keep the default from menu.html
 
   const color = `rgb(${left[0]}, ${left[1]}, ${left[2]})`;
   const root = document.documentElement.style;
